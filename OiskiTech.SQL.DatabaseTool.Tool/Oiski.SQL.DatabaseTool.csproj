@@ -7,8 +7,8 @@
     <ProjectGuid>{04BAF370-A8D6-4B50-8B55-CEFCC73DAE27}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OiskiTech.SQL.DatabaseTool</RootNamespace>
-    <AssemblyName>OiskiTech.SQL.DatabaseTool</AssemblyName>
+    <RootNamespace>Oiski.SQL.DatabaseTool</RootNamespace>
+    <AssemblyName>Oiski.SQL.DatabaseTool</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\OiskiTech.SQL.DatabaseTool.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Oiski.SQL.DatabaseTool.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
