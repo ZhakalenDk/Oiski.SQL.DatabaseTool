@@ -1,1 +1,1 @@
-# OiskiTech.SQL.DatabaseTool
+# Oiski.SQL.DatabaseTool
