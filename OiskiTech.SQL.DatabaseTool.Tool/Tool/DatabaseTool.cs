@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
-namespace OiskiTech.SQL.DatabaseTool
+namespace Oiski.SQL.DatabaseTool
 {
     /// <summary>
     /// Represents a tool that can create and manipulate databases from scratch.

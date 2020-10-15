@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace OiskiTech.SQL.DatabaseTool
+namespace Oiski.SQL.DatabaseTool
 {
     /// <summary>
     /// Represents a simple I/O system for handling XML files

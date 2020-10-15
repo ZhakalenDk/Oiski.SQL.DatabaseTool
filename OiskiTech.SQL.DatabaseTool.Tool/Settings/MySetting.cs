@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace OiskiTech.SQL.DatabaseTool
+namespace Oiski.SQL.DatabaseTool
 {
     /// <summary>
     /// Represents a setting with a name and a value

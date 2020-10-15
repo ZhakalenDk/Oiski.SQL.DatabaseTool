@@ -9,7 +9,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace OiskiTech.SQL.DatabaseTool
+namespace Oiski.SQL.DatabaseTool
 {
     /// <summary>
     /// Represents a collection of <see cref="MySetting"/> objects with <see cref="XMLIO"/> Serialization options
