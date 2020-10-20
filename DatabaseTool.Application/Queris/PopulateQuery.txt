@@ -1,0 +1,20 @@
+insert into BankData values (2020, 'Lenovo Bank',10000,10000)
+
+insert into UserData values (1234567890, 'admin', 1, 'test', 'test', 'test@test.test', 'testCity', 1324, 'testStreet 12');
+insert into UserData values (9876543230, 'test', 1, 'Mike', 'test', 'Mike@test.test', 'Mike City', 1234, 'Abe vej 64');
+insert into UserData values (9999999999, 'test', 1, 'Jens', 'Neergaard', 'Jens@test.test', 'Jens City', 5555, 'Jens Street 24');
+insert into UserData values (1111111111, 'notadmin', 0, 'test', 'test', 'test@test.test', 'testCity', 1324, 'testStreet 12');
+
+insert into AccountData values (20205611221142,1111111111, 'Mike Balance',0 ,10000 ,1, 20000, 10, 30)
+insert into AccountData values (20205511221142,1111111111, 'Jens Balance',1 ,10000 ,1, 20000, 10, 30)
+insert into AccountData values (20205711221142,1111111111, 'Jens Loan',2 ,-10000 ,0, 20000, 10, 30)
+
+insert into AccountRequestData (AccRegID, CPR,AccountType, Reason ,TimeStamp)
+values (1110114611113111, 1111111111, 0 , 'Make me an account please', '2020-09-24 10:46:31.220');
+insert into AccountRequestData (AccRegID, CPR, AccountType, AdminCPR, AccountStatus, Reason,TimeStamp)
+values (1110115011113111, 1111111111, 1, 9876543230, 1, 'Cos you know i need it!', '2020-09-24 10:50:31.121');
+
+insert into LogEntryData (LogID, AccountID, Message, TimeStamp)
+values (463105511221142, 20205611221142, 'Account Created', '2020-09-24 10:46:31.220');
+insert into LogEntryData (LogID, AccountID, Message, TimeStamp)
+values (463105611221142, 20205511221142, 'Account Created', '2020-09-24 10:46:31.320')

@@ -1,0 +1,243 @@
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectUserALL')
+drop procedure SelectUserALL 
+:
+Create procedure SelectUserALL
+as
+select * from UserData
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectUserOnCPR')
+drop procedure SelectUserOnCPR
+:
+Create procedure SelectUserOnCPR @SearchKey BIGINT
+As
+Select * from UserData
+Where CPR = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectUsersOnFirstName')
+drop procedure SelectUsersOnFirstName
+:
+Create procedure SelectUsersOnFirstName @SearchKey varchar(255)
+as
+select * from UserData
+where FirstName = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectUsersOnIsAdmin')
+drop procedure SelectUsersOnIsAdmin
+:
+Create procedure SelectUsersOnIsAdmin @SearchKey tinyint
+as
+select * from UserData
+where IsAdmin = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectUsersOnCity')
+drop procedure SelectUsersOnCity
+:
+Create procedure SelectUsersOnCity @SearchKey varchar(255)
+as
+select * from UserData
+where City = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountALL')
+drop procedure SelectAccountALL
+:
+Create procedure SelectAccountALL
+as
+select * from AccountData
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountOnAccountID')
+drop procedure SelectAccountOnAccountID
+:
+Create procedure SelectAccountOnAccountID @SearchKey BIGINT
+as
+select * from AccountData
+where AccountID = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountOnCPR')
+drop procedure SelectAccountOnCPR
+:
+Create procedure SelectAccountOnCPR @SearchKey BIGINT
+as
+select * from AccountData
+where CPR = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountRequestALL')
+drop procedure SelectAccountRequestALL
+:
+Create procedure SelectAccountRequestALL
+as
+select * from AccountRequestData
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountRequestOnAccRegID')
+drop procedure SelectAccountRequestOnAccRegID
+:
+Create procedure SelectAccountRequestOnAccRegID @SearchKey BIGINT
+as
+select * from AccountRequestData
+where AccRegID = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountRequestOnCPR')
+drop procedure SelectAccountRequestOnCPR
+:
+Create procedure SelectAccountRequestOnCPR @SearchKey BIGINT
+as
+select * from AccountRequestData
+where CPR = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountRequestOnStatus')
+drop procedure SelectAccountRequestOnStatus
+:
+Create procedure SelectAccountRequestOnStatus @SearchKey tinyint
+as
+select * from AccountRequestData
+where AccountStatus = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectAccountRequestOnAccountType')
+drop procedure SelectAccountRequestOnAccountType
+:
+Create procedure SelectAccountRequestOnAccountType @SearchKey tinyint
+as
+select * from AccountRequestData
+where AccountType = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectLogEntryALL')
+drop procedure SelectLogEntryALL
+:
+Create procedure SelectLogEntryALL
+as
+select * from LogEntryData
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectLogEntryOnLogID')
+drop procedure SelectLogEntryOnLogID
+:
+Create procedure SelectLogEntryOnLogID @SearchKey BIGINT
+as
+select * from LogEntryData
+where LogID = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectLogEntryOnAccountID')
+drop procedure SelectLogEntryOnAccountID
+:
+Create procedure SelectLogEntryOnAccountID @SearchKey BIGINT
+as
+select * from LogEntryData
+where AccountID = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'UpdateAccountRequestData')
+drop procedure UpdateAccountRequestData
+:
+Create procedure UpdateAccountRequestData @accRegID BIGINT, @adminCPR BIGINT, @accountStatus tinyint
+as
+update AccountRequestData
+set AdminCPR = @adminCPR, AccountStatus = @accountStatus
+where AccRegID = @accRegID
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'UpdateAccountData')
+drop procedure UpdateAccountData
+:
+Create procedure UpdateAccountData @accountID BIGINT, @name varchar(255), @type tinyint, @balance decimal, @canWithdraw tinyint, @overdrawLimit decimal,
+@intrest decimal, @overdrawFee float
+as
+update AccountData
+set name = @name, Balance = @balance, CanWithDraw = @canWithdraw, Type = @type, OverDrawLimit = @overdrawLimit, intrest = @intrest, OverdrawFee = @overdrawFee
+where AccountId = @accountID
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'UpdateUserData')
+drop procedure UpdateUserData
+:
+Create procedure UpdateUserData @atCPR BIGINT, @password varchar(255), @firstName varchar(255), @lastName varchar(255), @email varchar(255),
+@city varchar(255), @postalCode int, @address varchar(255), @isAdmin tinyint
+as
+update UserData
+set Password = @password, FirstName = @firstName, LastName = @lastName, Email = @email, City = @city, PostalCode = @postalCode, Address = @address, IsAdmin = @isAdmin
+where CPR = @atCPR
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'UpdateBankData')
+drop procedure UpdateBankData
+:
+Create procedure UpdateBankData @regNumber BIGINT, @bankName varchar(15) , @totalCredit decimal, @totalLoaned decimal
+as 
+update BankData
+set TotalCredit = @totalCredit, TotalLoaned = @totalLoaned , Name = @bankName , RegNumber = regNumber
+if exists(SELECT * from BankData where RegNumber=2020)            
+BEGIN            
+update BankData set Name = @bankName, TotalCredit = @totalCredit, TotalLoaned = @totalLoaned where RegNumber=@regNumber  
+End                    
+else            
+BEGIN  
+insert into BankData values (@regNumber, @bankName,@totalCredit,@totalLoaned)
+END 
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'SelectBankData')
+drop procedure SelectBankData
+:
+Create procedure SelectBankData @regNumber BIGINT
+as 
+Select * from BankData
+Where RegNumber = @regNumber
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'CreateUser')
+drop procedure CreateUser
+:
+Create procedure CreateUser @atCPR BIGINT, @password varchar(255), @isAdmin tinyint, @firstName varchar(255), 
+@lastName varchar(255), @email varchar(255), @city varchar(255), @postalCode int, @address varchar(255)
+as
+insert into UserData( CPR, Password, IsAdmin, FirstName, LastName, Email, City, PostalCode, Address)
+values (@atCPR, @password, @isAdmin, @firstName, @lastName, @email, @city, @postalCode, @address)
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'CreateAccount')
+drop procedure CreateAccount
+:
+Create procedure CreateAccount @accountID BIGINT, @CPR BIGINT, @name varchar(255), @type tinyint, @balance decimal, @canWithdraw tinyint,
+@overdrawLimit decimal, @intrest float, @overdrawFee float
+as
+insert into AccountData (AccountID, CPR, Name, Type, Balance, CanWithDraw, OverDrawLimit, intrest, OverdrawFee)
+values(@accountID, @CPR, @name, @type, @balance, @canWithdraw, @overdrawLimit, @intrest, @overdrawFee)
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'CreateAccountRequestData')
+drop procedure CreateAccountRequestData
+:
+Create procedure CreateAccountRequestData @accRegNumber BIGINT, @CPR BIGINT, @accountType tinyint,
+@timeStamp datetime, @accountStatus tinyint, @reason varchar(8000)
+as
+insert into AccountRequestData (AccRegID, CPR, AccountType, TimeStamp, AccountStatus, Reason)
+values(@accRegNumber, @CPR, @accountType, @timeStamp, @accountStatus, @reason)
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'CreateLogEntry')
+drop procedure CreateLogEntry
+:
+Create procedure CreateLogEntry @logID BIGINT, @accountID BIGINT, @timeStamp datetime, @message varchar(8000)
+as
+insert into LogEntryData (LogID, AccountID, TimeStamp, Message)
+values (@logID, @accountID, @timeStamp, @message)
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'DropUserOnCPR')
+drop procedure DropUserOnCPR
+:
+Create procedure DropUserOnCPR @SearchKey BIGINT
+as
+delete from UserData
+where CPR = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'DeleteAccountOnAccountID')
+drop procedure DeleteAccountOnAccountID
+:
+Create procedure DeleteAccountOnAccountID @SearchKey BIGINT
+as
+delete from AccountData
+where AccountID = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'DeleteAccountRequestOnAccRegID')
+drop procedure DeleteAccountRequestOnAccRegID
+:
+Create procedure DeleteAccountRequestOnAccRegID @SearchKey BIGINT
+as
+delete from AccountRequestData
+where AccRegID = @SearchKey
+:
+if EXISTS (select type_desc from sys.procedures with(Nolock) where name = 'DeleteLogentryOnLogID')
+drop procedure DeleteLogentryOnLogID
+:
+Create procedure DeleteLogentryOnLogID @SearchKey BIGINT
+as
+delete from LogEntryData
+where LogID = @SearchKey

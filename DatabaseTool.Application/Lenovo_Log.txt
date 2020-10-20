@@ -1,0 +1,2 @@
+20/10/2020 13.19.53: Database with name: Lenovo was created at: C:\Users\smukk\source\repos\Oiski.SQL.DatabaseTool\DatabaseTool.Application
+20/10/2020 13.43.17: Database with name: Lenovo was created at: C:\Users\smukk\source\repos\Oiski.SQL.DatabaseTool\DatabaseTool.Application

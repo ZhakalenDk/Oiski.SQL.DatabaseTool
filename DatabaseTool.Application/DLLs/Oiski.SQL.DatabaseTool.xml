@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Oiski.SQL.DatabaseTool</name>
+    </assembly>
+    <members>
+        <member name="T:Oiski.SQL.DatabaseTool.DatabaseTool">
+            <summary>
+            Represents a tool that can create and manipulate databases from scratch.
+            <br/>
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.DatabaseTool.DBName">
+            <summary>
+            The name of the database
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.DatabaseTool.PathToDatabase">
+            <summary>
+            The path to the database MDF file without the file itself.
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.DatabaseTool.ConnectionString">
+            <summary>
+            The connection string used to connect to the database
+            </summary>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.AddToLog(System.String)">
+            <summary>
+            This will create a new log (.txt) file if it does not elready exist. if it does it will append the specified message to the files content
+            </summary>
+            <param name="_message"></param>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.Exists">
+            <summary>
+            Checks if the MDF file exists and if it does it will set the internal <see cref="T:System.Data.SqlClient.SqlConnection"/> using th e<see cref="P:Oiski.SQL.DatabaseTool.DatabaseTool.ConnectionString"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.CreateDatabase">
+            <summary>
+            Creates an entirely new database if it does not already exist. (<i>This will generate and MDF file and a LOG file at the specified <see cref="P:Oiski.SQL.DatabaseTool.DatabaseTool.PathToDatabase"/></i>)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.AssembleDatabase">
+            <summary>
+            This will assemble tables for the database specified by the <see cref="P:Oiski.SQL.DatabaseTool.DatabaseTool.ConnectionString"/>. This is done by executing the query found in the following file: Quries\AssembleQuery.txt
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.CreateProcedures">
+            <summary>
+            This will create stored procedures for the database specified by the <see cref="P:Oiski.SQL.DatabaseTool.DatabaseTool.ConnectionString"/>. This is done by executing the query found in the following file: Quries\ProcedureQuery.txt
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.PopulateDatabase">
+            <summary>
+            This will populate the database specified by the <see cref="P:Oiski.SQL.DatabaseTool.DatabaseTool.ConnectionString"/> with test data. This is done by executing the query found in the following file: Quries\Populate.txt
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.DeleteData">
+            <summary>
+            This will delete all data including tables and procedures for the database specified by the <see cref="P:Oiski.SQL.DatabaseTool.DatabaseTool.ConnectionString"/>. This is done by executing the query found in the following file: Quries\DeletionQuery.txt
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.DeleteDatabase(System.Boolean)">
+            <summary>
+            This will delete the entire database, which includes the Master Database File (MDF) and the reference in the LocalDB.
+            </summary>
+            <param name="deleteLog">Whether or not to delete the log file associated with the database</param>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.CreateMDF">
+            <summary>
+            This creates a new database file (.mdf) for which this <see cref="T:Oiski.SQL.DatabaseTool.DatabaseTool"/> instance can execute the four <see cref="T:Oiski.SQL.DatabaseTool.DatabaseTool.Query"/> files.
+            <br/>
+            <strong>NOTE:</strong> <i>This will generate a clean database with nothing in it and place it in the specified <see cref="P:Oiski.SQL.DatabaseTool.DatabaseTool.PathToDatabase"/></i> 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.ReadData">
+            <summary>
+            Loads the text files in the \Quries folder
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.#ctor(System.String)">
+            <summary>
+            This will initialize a new instance of the <see cref="T:Oiski.SQL.DatabaseTool.DatabaseTool"/> where the name of the database is set.
+            <br/>
+            The path where the database will be stored will be set according to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/> based on the location of <see cref="M:System.Reflection.Assembly.GetExecutingAssembly"/>
+            </summary>
+            <param name="_dbName">The name of the database</param>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.DatabaseTool.#ctor(System.String,System.String)">
+            <summary>
+            This will initialize a new instance of the <see cref="T:Oiski.SQL.DatabaseTool.DatabaseTool"/> where the name and path for the database is set
+            </summary>
+            <param name="_dbName">The name of the database</param>
+            <param name="_path">The path to the database MDF file without the file itself</param>
+        </member>
+        <member name="T:Oiski.SQL.DatabaseTool.DatabaseTool.Query">
+            <summary>
+            Represents the 4 different .txt file entries found in the \Quries folder
+            </summary>
+        </member>
+        <member name="T:Oiski.SQL.DatabaseTool.MySetting">
+            <summary>
+            Represents a setting with a name and a value
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.MySetting.Name">
+            <summary>
+            This is treated as a unique key by the <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/>
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.MySetting.Value">
+            <summary>
+            This is the actual setting
+            </summary>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySetting.IsEmpty">
+            <summary>
+            This will check the <see cref="P:Oiski.SQL.DatabaseTool.MySetting.Name"/> for a <see langword="null"/> or empty value
+            <br/>
+            <strong>Do not use this to check for <see langword="null"/> on an <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> instance</strong>
+            </summary>
+            <returns><see langword="true"/> if the <see cref="P:Oiski.SQL.DatabaseTool.MySetting.Name"/> was <see langword="null"/> or empty</returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySetting.#ctor">
+            <summary>
+            Initialize a new <see langword="instance"/> of type <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> with its <see langword="default"/> <see langword="values"/>
+            <br/>
+            <strong>Note:</strong> A <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> with <see langword="default"/> <see langword="value"/> is consideret empty
+            </summary>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySetting.#ctor(System.String,System.String)">
+            <summary>
+            This will initialize a new instance of the <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> where the <see cref="P:Oiski.SQL.DatabaseTool.MySetting.Name"/> and the <see cref="P:Oiski.SQL.DatabaseTool.MySetting.Value"/> of the setting is set
+            </summary>
+            <param name="_name"></param>
+            <param name="_value"></param>
+        </member>
+        <member name="T:Oiski.SQL.DatabaseTool.MySettingsCollection">
+            <summary>
+            Represents a collection of <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> objects with <see cref="T:Oiski.SQL.DatabaseTool.XMLIO"/> Serialization options
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.MySettingsCollection.Name">
+            <summary>
+            The name of the setting. This is used as the file name when saving the state of the <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> as well as when loading a previous state from file.
+            <br/>
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.MySettingsCollection.Settings">
+            <summary>
+            The collection of <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/>s
+            </summary>
+        </member>
+        <member name="P:Oiski.SQL.DatabaseTool.MySettingsCollection.Item(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="_setting"></param>
+            <returns>The first occurence in the <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> that matches the specified <paramref name="_setting"/> <see langword="value"/></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.AddSetting(System.String,System.String)">
+            <summary>
+            This will initialize and store a new instance of the <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> type in the collection
+            </summary>
+            <param name="_setting">This is a unique identifier for the setting. (<i>The value my not be used by another setting wihtin this collection</i>)</param>
+            <param name="_value">This is the actual value of the setting</param>
+            <returns> <see langword="false"/> if the value of <paramref name="_setting"/> was found as the identifier for another <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> in the collection.</returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.AddSetting(Oiski.SQL.DatabaseTool.MySetting)">
+            <summary>
+            
+            </summary>
+            <param name="_setting"></param>
+            <returns> <see langword="false"/> if the value of <paramref name="_setting"/> already exists in the collection.</returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.RemoveSetting(System.String)">
+            <summary>
+            This will locate and remove the <see cref="T:Oiski.SQL.DatabaseTool.MySetting"/> object from this collection where the identifier matches the value of <paramref name="_setting"/>  
+            </summary>
+            <param name="_setting"></param>
+            <returns><see langword="false"/> if the collection holds no instance that matches the specified value of <paramref name="_setting"/></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.RemoveSetting(Oiski.SQL.DatabaseTool.MySetting)">
+            <summary>
+            
+            </summary>
+            <param name="_setting"></param>
+            <returns><see langword="false"/> if the collection holds no instance that matches the specified <paramref name="_setting"/></returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.Save(System.String)">
+            <summary>
+            Saves the current state of the <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> into a file (.xml) at the specified <paramref name="_path"/> target location
+            </summary>
+            <param name="_path">The full path where the <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> should save its state. (<i>This must be passed without the file name and extenstion</i>)</param>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.Load(System.String)">
+            <summary>
+            Loads a former state of a <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> from a file (.xml) at the specified <paramref name="_path"/> target location and overrides this collection
+            </summary>
+            <param name="_path">The full path where the <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> should load the state. (<i>This must be passed without the file name and extension</i>)</param>
+            <returns><see langword="true"/> if the state of the <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> could be read from the file (.xml) at the specified <paramref name="_path"/> target location</returns>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.#ctor">
+            <summary>
+            Initializes a new <see langword="instance"/> of type <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> with its <see langword="default"/> <see langword="values"/>
+            </summary>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.MySettingsCollection.#ctor(System.String)">
+            <summary>
+            This will initialize a new <see cref="T:Oiski.SQL.DatabaseTool.MySettingsCollection"/> where the name of the collection is set
+            </summary>
+            <param name="_name"></param>
+        </member>
+        <member name="T:Oiski.SQL.DatabaseTool.XMLIO">
+            <summary>
+            Represents a simple I/O system for handling XML files
+            </summary>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.XMLIO.SerializeXML``1(``0,System.String)">
+            <summary>
+            Serialize an object of type <typeparamref name="T"/>, where <typeparamref name="T"/> is any serializable <see cref="T:System.Object"/>.
+            </summary>
+            <typeparam name="T">The type to serialize</typeparam>
+            <param name="_obj">The object to serialize</param>
+            <param name="_path">The folder structure path to the file, including the file name but without the file extension</param>
+        </member>
+        <member name="M:Oiski.SQL.DatabaseTool.XMLIO.DeserializeXML``1(System.String)">
+            <summary>
+            Deserialize an object of type <typeparamref name="T"/>, where <typeparamref name="T"/> is any deserializable <see cref="T:System.Object"/>.
+            </summary>
+            <param name="_path">The folder structure path to the file, including the file name but without the file extension</param>
+            <returns>A new <see langword="instance"/> of type <typeparamref name="T"/> where all <see langword="values"/> are set according to deserialized XML batch</returns>
+        </member>
+    </members>
+</doc>

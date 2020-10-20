@@ -1,0 +1,47 @@
+Create table UserData(
+ID int IDENTITY(1,1),
+CPR BIGINT  primary key not null,
+Password varchar(255) not null,
+IsAdmin tinyint not null,
+Firstname varchar(255) not null,
+LastName varchar(255) not null,
+Email varchar(255) not null,
+City varchar(255) not null,
+PostalCode int not null,
+Address varchar(255) not null
+)
+Create table AccountData(
+ID int IDENTITY(1,1),
+AccountID BIGINT primary key not null,
+CPR BIGINT foreign key references UserData(CPR),
+Name varchar(255) default '',
+Type tinyint default 0,
+Balance decimal default 0,
+CanWithDraw tinyint default 0,
+OverDrawLimit decimal default 0,
+intrest float default 0,
+OverdrawFee float default 0
+)
+Create table AccountRequestData(
+ID int IDENTITY(1,1),
+AccRegID BIGINT primary key not null,
+CPR BIGINT foreign key references UserData(CPR),
+AccountType tinyint default 0,
+AdminCPR BIGINT default 0,
+TimeStamp datetime not null,
+AccountStatus tinyint default 0,
+Reason varchar(8000) default ''
+)
+Create table LogEntryData(
+ID int IDENTITY(1,1),
+LogID BIGINT primary key not null,
+AccountID BIGINT foreign key references AccountData(AccountID),
+TimeStamp datetime not null,
+Message varchar(8000) default ''
+)
+Create table BankData(
+RegNumber int primary key not null,
+Name varchar(15) default '',
+TotalCredit decimal default 0,
+TotalLoaned decimal default 0
+)
