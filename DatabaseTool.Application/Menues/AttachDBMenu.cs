@@ -82,7 +82,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             DBConfigTextField.Position = new Vector2(DBConfigLabel.Position.x + DBConfigLabel.Text.Length + 1, DBPathTextField.Position.y + 3);
             #endregion
 
-            #region Create & Back Button
+            #region Attach & Back Button
             CreateDB = new ColorableOption("Attach Database", ControlTextColor, ControlBorderColor, _attachToEngine: false)
             {
                 SelectedIndex = new Vector2(0, 3),
@@ -94,7 +94,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                 {
                     Program.Tool = new DatabaseTool(DBNameTextField.Text, DBPathTextField.Text);
 
-
+                    
                 }
             };
 

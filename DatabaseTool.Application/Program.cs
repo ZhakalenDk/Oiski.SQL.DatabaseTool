@@ -7,8 +7,9 @@ namespace Oiski.SQL.DatabaseTool.Application
 {
     class Program
     {
-        public static DatabaseTool Tool { get; set; }
-        static void Main()
+        public static DatabaseTool Tool { get; set; } = null;
+        public static MySettingsCollection Settings { get; set; } = null;
+        static void Main ()
         {
             MainMenu.Init();
             CreateDBMenu.Init();

@@ -24,7 +24,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 
         private static int previousSelected;
 
-        public static void Init()
+        public static void Init ()
         {
             //Console.SetWindowSize(250, 27);
 
@@ -73,7 +73,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             };
             CreateDB.OnSelect += (s) =>
             {
-                if ( !string.IsNullOrWhiteSpace(DBNameTextField.Text) && !string.IsNullOrWhiteSpace(DBPathTextField.Text) )
+                if ( !string.IsNullOrWhiteSpace(DBNameTextField.Text) && !string.IsNullOrWhiteSpace(DBPathTextField.Text) && Program.Tool == null )
                 {
                     Program.Tool = new DatabaseTool(DBNameTextField.Text, DBPathTextField.Text);
 
@@ -81,6 +81,10 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                     {
                         throw new Exception("Somehting went wrong");
                     }
+
+                    Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
+                    Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);
+                    Program.Settings.Save(DBPathTextField.Text);
                 }
             };
 
@@ -106,7 +110,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             menu.Controls.AddControl(BackButton);
         }
 
-        public static void Show(bool _show = true)
+        public static void Show (bool _show = true)
         {
             if ( _show )
             {
@@ -126,7 +130,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             OiskiEngine.Input.ResetSlection();
         }
 
-        private static void OnTarget(SelectableControl _control)
+        private static void OnTarget (SelectableControl _control)
         {
             if ( menu.Controls.FindControl(item => item.IndexID == previousSelected) is ColorableLabel previousLabel )
             {
