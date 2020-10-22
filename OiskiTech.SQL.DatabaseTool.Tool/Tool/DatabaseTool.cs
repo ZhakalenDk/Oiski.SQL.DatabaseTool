@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Linq;
 using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
@@ -269,7 +268,8 @@ namespace Oiski.SQL.DatabaseTool
             try
             {
                 string drop = $"drop database [{DBName}]";
-                DataContext tempDB = new DataContext(TEMPDBCONSTRING);
+                //DataContext tempDB = new DataContext(TEMPDBCONSTRING);
+                SqlConnection tempDB = new SqlConnection(TEMPDBCONSTRING);
                 //if ( connection.State != ConnectionState.Closed )
                 //{
                 //    connection.Close();
@@ -278,8 +278,10 @@ namespace Oiski.SQL.DatabaseTool
                 //}
 
                 //connection = null;
-                tempDB.ExecuteCommand($"ALTER DATABASE {DBName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
-                tempDB.ExecuteCommand(drop);
+                //tempDB.ExecuteCommand($"ALTER DATABASE {DBName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+                //tempDB.ExecuteCommand(drop);
+                SqlCommand dropCommand = new SqlCommand(drop);
+                SqlCommand alterCommand = new SqlCommand($"ALTER DATABASE {DBName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
                 AddToLog($"{DBName} was dropped!");
 
                 if ( deleteLog && File.Exists($"{PathToDatabase}\\{DBName}_Log.txt") )
