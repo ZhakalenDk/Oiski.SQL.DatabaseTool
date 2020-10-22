@@ -280,8 +280,14 @@ namespace Oiski.SQL.DatabaseTool
                 //connection = null;
                 //tempDB.ExecuteCommand($"ALTER DATABASE {DBName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
                 //tempDB.ExecuteCommand(drop);
-                SqlCommand dropCommand = new SqlCommand(drop);
-                SqlCommand alterCommand = new SqlCommand($"ALTER DATABASE {DBName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+                SqlCommand dropCommand = new SqlCommand(drop, tempDB);
+                SqlCommand alterCommand = new SqlCommand($"ALTER DATABASE {DBName} SET SINGLE_USER WITH ROLLBACK IMMEDIATE", tempDB);
+
+                tempDB.Open();
+                alterCommand.ExecuteNonQuery();
+                dropCommand.ExecuteNonQuery();
+                tempDB.Close();
+
                 AddToLog($"{DBName} was dropped!");
 
                 if ( deleteLog && File.Exists($"{PathToDatabase}\\{DBName}_Log.txt") )
