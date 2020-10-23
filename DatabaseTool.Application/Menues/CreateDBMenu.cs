@@ -24,10 +24,8 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 
         private static int previousSelected;
 
-        public static void Init ()
+        public static void Init()
         {
-            //Console.SetWindowSize(250, 27);
-
             #region Header
             Header = new ColorableLabel("Oiski's Database Tool", ControlTextColor, ControlBorderColor, _attachToEngine: false);
             Header.Position = PositionHelper.CenterControlOnX(0, Header);
@@ -75,16 +73,21 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             {
                 if ( !string.IsNullOrWhiteSpace(DBNameTextField.Text) && !string.IsNullOrWhiteSpace(DBPathTextField.Text) && Program.Tool == null )
                 {
+                    Show(false);
+                    LoadingWindow.Show("Creating Database. Standby...");
                     Program.Tool = new DatabaseTool(DBNameTextField.Text, DBPathTextField.Text);
 
                     if ( !Program.Tool.CreateDatabase() )
                     {
-                        throw new Exception("Somehting went wrong");
+
                     }
 
                     Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
                     Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);
                     Program.Settings.Save(DBPathTextField.Text);
+
+                    MainMenu.Show();
+                    LoadingWindow.Show(false);
                 }
             };
 
@@ -96,8 +99,8 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 
             BackButton.OnSelect += (s) =>
             {
-                Show(false);
                 MainMenu.Show();
+                Show(false);
             };
             #endregion
 
@@ -110,13 +113,15 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             menu.Controls.AddControl(BackButton);
         }
 
-        public static void Show (bool _show = true)
+        public static void Show(bool _show = true)
         {
             if ( _show )
             {
                 OiskiEngine.Configuration.Size = new Vector2(Console.WindowWidth, Console.WindowHeight);
                 menu.OnTarget = OnTarget;
                 OiskiEngine.Input.AtTarget += menu.OnTarget;
+                OiskiEngine.Input.SetNavigation("Vertical", true);
+                OiskiEngine.Input.SetSelect(true);
             }
             else
             {
@@ -125,12 +130,13 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 
             DBNameLabel.BorderStyle(BorderArea.Horizontal, '~');
             BackButton.BorderStyle(BorderArea.Horizontal, '-');
+            CreateDB.BorderStyle(BorderArea.Horizontal, '-');
             menu.Show(_show);
             previousSelected = DBNameLabel.IndexID;
             OiskiEngine.Input.ResetSlection();
         }
 
-        private static void OnTarget (SelectableControl _control)
+        private static void OnTarget(SelectableControl _control)
         {
             if ( menu.Controls.FindControl(item => item.IndexID == previousSelected) is ColorableLabel previousLabel )
             {

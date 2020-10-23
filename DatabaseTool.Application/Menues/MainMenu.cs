@@ -4,6 +4,7 @@ using Oiski.ConsoleTech.Engine.Color.Rendering;
 using Oiski.ConsoleTech.Engine.Controls;
 using Oiski.SQL.DatabaseTool.Application.Menues;
 using System;
+using System.IO;
 
 namespace Oiski.SQL.DatabaseTool.Application
 {
@@ -22,10 +23,10 @@ namespace Oiski.SQL.DatabaseTool.Application
         public static ColorableOption DeleteTablesAndProcedures { get; set; }
         public static ColorableOption DeleteTrace { get; set; }
 
-        public static void Init ()
+        public static void Init()
         {
             Console.SetWindowSize(100, 27);
-            //OiskiEngine.Configuration.Size = new Vector2(Console.WindowWidth, Console.WindowHeight);
+            OiskiEngine.Input.SetNavigation("Horizontal", false);
 
             #region Header
             Header = new ColorableLabel("Oiski's Database Tool", ControlTextColor, ControlBorderColor, _attachToEngine: false);
@@ -42,8 +43,8 @@ namespace Oiski.SQL.DatabaseTool.Application
             CreateDB.OnSelect += (s) =>
             {
                 OiskiEngine.Input.ResetSlection();
-                Show(false);
                 CreateDBMenu.Show();
+                Show(false);
             };
             #endregion
 
@@ -56,8 +57,8 @@ namespace Oiski.SQL.DatabaseTool.Application
             AttachDB.OnSelect += (s) =>
             {
                 OiskiEngine.Input.ResetSlection();
-                Show(false);
                 AttachDBMenu.Show();
+                Show(false);
             };
             #endregion
 
@@ -71,7 +72,11 @@ namespace Oiski.SQL.DatabaseTool.Application
             {
                 if ( Program.Tool != null )
                 {
+                    Show(false);
+                    LoadingWindow.Show("Creating Tables. Standby...");
                     Program.Tool.AssembleDatabase();
+                    Show();
+                    LoadingWindow.Show(false);
                 }
             };
             #endregion
@@ -86,7 +91,11 @@ namespace Oiski.SQL.DatabaseTool.Application
             {
                 if ( Program.Tool != null )
                 {
+                    Show(false);
+                    LoadingWindow.Show("Populating Database. Standby...");
                     Program.Tool.PopulateDatabase();
+                    Show();
+                    LoadingWindow.Show(false);
                 }
             };
             #endregion
@@ -101,7 +110,11 @@ namespace Oiski.SQL.DatabaseTool.Application
             {
                 if ( Program.Tool != null )
                 {
+                    Show(false);
+                    LoadingWindow.Show("Creating Procedures. Standby...");
                     Program.Tool.CreateProcedures();
+                    Show();
+                    LoadingWindow.Show(false);
                 }
             };
             #endregion
@@ -116,7 +129,11 @@ namespace Oiski.SQL.DatabaseTool.Application
             {
                 if ( Program.Tool != null )
                 {
+                    Show(false);
+                    LoadingWindow.Show("Deleting Data. Standby...");
                     Program.Tool.DeleteData();
+                    Show();
+                    LoadingWindow.Show(false);
                 }
             };
             #endregion
@@ -131,7 +148,16 @@ namespace Oiski.SQL.DatabaseTool.Application
             {
                 if ( Program.Tool != null )
                 {
-                    Program.Tool.DeleteDatabase();
+                    Show(false);
+                    LoadingWindow.Show("Deleting Trace. Standby...");
+                    Program.Tool.DeleteDatabase(true);
+                    if ( File.Exists($"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Settings.xml") )
+                    {
+                        File.Delete(( $"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Settings.xml" ));
+                    }
+                    Program.Tool = null;
+                    Show();
+                    LoadingWindow.Show(false);
                 }
             };
             #endregion
@@ -148,19 +174,21 @@ namespace Oiski.SQL.DatabaseTool.Application
             #endregion
         }
 
-        private static Vector2 CenterControlOnX (int _positionY, Label _control, Label _control2 = null)
+        private static Vector2 CenterControlOnX(int _positionY, Label _control, Label _control2 = null)
         {
             return new Vector2(( Console.WindowWidth / 2 ) - ( ( _control.Text.Length / 2 + 2 ) + ( ( _control2 != null ) ? ( _control2.Text.Length / 2 + 2 ) : ( 0 ) ) ), _positionY);
         }
 
-        public static void Show (bool _show = true)
+        public static void Show(bool _show = true)
         {
             if ( _show )
             {
                 Console.SetWindowSize(100, 27);
                 OiskiEngine.Configuration.Size = new Vector2(Console.WindowWidth, Console.WindowHeight);
+                OiskiEngine.Input.SetNavigation("Vertical", true);
+                OiskiEngine.Input.SetSelect(true);
+                CreateDB.BorderStyle(BorderArea.Horizontal, '~');
             }
-
             menu.Show(_show);
             OiskiEngine.Input.ResetSlection();
         }

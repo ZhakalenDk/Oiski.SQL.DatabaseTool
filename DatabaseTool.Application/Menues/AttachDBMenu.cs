@@ -19,17 +19,13 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
         public static ColorableTextField DBNameTextField { get; private set; }
         public static ColorableLabel DBPathLabel { get; private set; }
         public static ColorableTextField DBPathTextField { get; private set; }
-        public static ColorableLabel DBConfigLabel { get; private set; }
-        public static ColorableTextField DBConfigTextField { get; private set; }
-        public static ColorableOption CreateDB { get; private set; }
+        public static ColorableOption AttachDB { get; private set; }
         public static ColorableOption BackButton { get; private set; }
 
         private static int previousSelected;
 
         public static void Init()
         {
-            //Console.SetWindowSize(250, 27);
-
             #region Header
             Header = new ColorableLabel("Oiski's Database Tool", ControlTextColor, ControlBorderColor, _attachToEngine: false);
             Header.Position = PositionHelper.CenterControlOnX(0, Header);
@@ -68,47 +64,52 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             #endregion
 
             #region Database Config Controls
-            DBConfigLabel = new ColorableLabel("Database Config Name", ControlTextColor, ControlBorderColor, _attachToEngine: false)
-            {
-                Position = new Vector2(5, DBPathTextField.Position.y + 3)
-            };
+            //DBConfigLabel = new ColorableLabel("Database Config Name", ControlTextColor, ControlBorderColor, _attachToEngine: false)
+            //{
+            //    Position = new Vector2(5, DBPathTextField.Position.y + 3)
+            //};
 
-            DBConfigTextField = new ColorableTextField(string.Empty, new RenderColor(ConsoleColor.Green, ConsoleColor.Black), ControlBorderColor, _attachToEngine: false)
-            {
-                SelectedIndex = new Vector2(0, 2),
-                EraseTextOnSelect = true,
-                ResetAfterFirstWrite = true
-            };
-            DBConfigTextField.Position = new Vector2(DBConfigLabel.Position.x + DBConfigLabel.Text.Length + 1, DBPathTextField.Position.y + 3);
+            //DBConfigTextField = new ColorableTextField(string.Empty, new RenderColor(ConsoleColor.Green, ConsoleColor.Black), ControlBorderColor, _attachToEngine: false)
+            //{
+            //    SelectedIndex = new Vector2(0, 2),
+            //    EraseTextOnSelect = true,
+            //    ResetAfterFirstWrite = true
+            //};
+            //DBConfigTextField.Position = new Vector2(DBConfigLabel.Position.x + DBConfigLabel.Text.Length + 1, DBPathTextField.Position.y + 3);
             #endregion
 
             #region Attach & Back Button
-            CreateDB = new ColorableOption("Attach Database", ControlTextColor, ControlBorderColor, _attachToEngine: false)
+            AttachDB = new ColorableOption("Attach Database", ControlTextColor, ControlBorderColor, _attachToEngine: false)
             {
-                SelectedIndex = new Vector2(0, 3),
-                Position = new Vector2(DBPathTextField.Position.x, DBConfigTextField.Position.y + 6)
+                SelectedIndex = new Vector2(0, 2),
+                Position = new Vector2(DBPathTextField.Position.x, DBPathTextField.Position.y + 6)
             };
-            CreateDB.OnSelect += (s) =>
+            AttachDB.OnSelect += (s) =>
             {
-                if ( !string.IsNullOrWhiteSpace(DBNameTextField.Text) && !string.IsNullOrWhiteSpace(DBPathTextField.Text) && !string.IsNullOrWhiteSpace(DBConfigTextField.Text) )
+                if ( !string.IsNullOrWhiteSpace(DBNameTextField.Text) && !string.IsNullOrWhiteSpace(DBPathTextField.Text) )
                 {
+                    Show(false);
+                    LoadingWindow.Show("Attaching Database. Standby...");
                     Program.Tool = new DatabaseTool(DBNameTextField.Text, DBPathTextField.Text);
-
-                    
+                    Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
+                    Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);
+                    Program.Settings.Save(DBPathTextField.Text);
+                    MainMenu.Show();
+                    LoadingWindow.Show(false);
                 }
             };
 
             BackButton = new ColorableOption("Back", ControlTextColor, ControlBorderColor, _attachToEngine: false)
             {
-                SelectedIndex = new Vector2(0, 4),
-                Position = new Vector2(CreateDB.Position.x, CreateDB.Position.y + 3)
+                SelectedIndex = new Vector2(0, 3),
+                Position = new Vector2(AttachDB.Position.x, AttachDB.Position.y + 3)
             };
 
             BackButton.OnSelect += (s) =>
             {
                 s.BorderStyle(BorderArea.Horizontal, '-');
-                Show(false);
                 MainMenu.Show();
+                Show(false);
             };
             #endregion
 
@@ -117,9 +118,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             menu.Controls.AddControl(DBNameTextField);
             menu.Controls.AddControl(DBPathLabel);
             menu.Controls.AddControl(DBPathTextField);
-            menu.Controls.AddControl(DBConfigLabel);
-            menu.Controls.AddControl(DBConfigTextField);
-            menu.Controls.AddControl(CreateDB);
+            menu.Controls.AddControl(AttachDB);
             menu.Controls.AddControl(BackButton);
         }
 
@@ -130,6 +129,8 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                 OiskiEngine.Configuration.Size = new Vector2(Console.WindowWidth, Console.WindowHeight);
                 menu.OnTarget = OnTarget;
                 OiskiEngine.Input.AtTarget += menu.OnTarget;
+                OiskiEngine.Input.SetNavigation("Vertical", true);
+                OiskiEngine.Input.SetSelect(true);
             }
             else
             {
@@ -138,6 +139,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 
             DBNameLabel.BorderStyle(BorderArea.Horizontal, '~');
             BackButton.BorderStyle(BorderArea.Horizontal, '-');
+            AttachDB.BorderStyle(BorderArea.Horizontal, '-');
             menu.Show(_show);
             previousSelected = DBNameLabel.IndexID;
             OiskiEngine.Input.ResetSlection();
