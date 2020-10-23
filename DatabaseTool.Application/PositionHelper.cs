@@ -8,9 +8,14 @@ namespace Oiski.SQL.DatabaseTool.Application
 {
     public static class PositionHelper
     {
-        public static Vector2 CenterControlOnX(int _positionY, Label _control)
+        public static Vector2 CenterControlOnX (int _positionY, Label _control)
         {
             return new Vector2(( Console.WindowWidth / 2 ) - ( _control.Text.Length / 2 + 2 ), _positionY);
+        }
+
+        public static Vector2 CenterControlOnY (int _positionX)
+        {
+            return new Vector2(_positionX, ( Console.WindowHeight / 2 ) - 1);
         }
     }
 }
