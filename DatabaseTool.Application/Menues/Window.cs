@@ -2,6 +2,7 @@
 using Oiski.ConsoleTech.Engine.Color.Controls;
 using Oiski.ConsoleTech.Engine.Color.Rendering;
 using Oiski.ConsoleTech.Engine.Controls;
+using Oiski.ConsoleTech.Engine.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,15 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
         private Vector2 previousSelectedIndex = new Vector2(0, 0);
 
         public string Name { get; }
+        public bool ResetMarker { get; set; } = true;
+        public bool AllowMultiMarker { get; set; } = true;
+        public ControlCollection GetCollection
+        {
+            get
+            {
+                return menu.Controls;
+            }
+        }
         public RenderColor DefaultTextColor { get; set; } = new RenderColor(ConsoleColor.Cyan, ConsoleColor.Black);
         public RenderColor DefaultBorderColor { get; set; } = new RenderColor(ConsoleColor.Blue, ConsoleColor.Black);
 
@@ -90,39 +100,53 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
         {
             if ( _show )
             {
-                OiskiEngine.Input.ResetSlection();
-                var previousControl = menu.Controls.FindControl(previousSelectedIndex);
-
-                if ( previousControl != null )
+                if ( ResetMarker )
                 {
-                    previousControl.BorderStyle(BorderArea.Horizontal, '-');
+                    OiskiEngine.Input.ResetSlection();
+                    var previousControl = menu.Controls.FindControl(previousSelectedIndex);
 
-                    if ( menu.Controls.FindControl(item => item.IndexID == previousControl.IndexID - 1 && item.IndexID != menu.Controls[0].IndexID) is ColorableLabel previousLabel )
+                    if ( previousControl != null )
                     {
-                        previousLabel.BorderStyle(BorderArea.Horizontal, '-');
+                        previousControl.BorderStyle(BorderArea.Horizontal, '-');
+
+                        if ( menu.Controls.FindControl(item => item.IndexID == previousControl.IndexID - 1 && item.IndexID != menu.Controls[0].IndexID) is ColorableLabel previousLabel )
+                        {
+                            previousLabel.BorderStyle(BorderArea.Horizontal, '-');
+                        }
+                    }
+
+                    var firstControl = menu.Controls.FindControl(new Vector2(0, 0));
+
+                    if ( firstControl != null )
+                    {
+                        firstControl.BorderStyle(BorderArea.Horizontal, '~');
+                        if ( AllowMultiMarker )
+                        {
+                            if ( menu.Controls.FindControl(item => item.IndexID == firstControl.IndexID - 1 && item.IndexID != menu.Controls[0].IndexID) is ColorableLabel firstLabel )
+                            {
+                                firstLabel.BorderStyle(BorderArea.Horizontal, '~');
+                                previousSelectedPosition = firstLabel.Position;
+                            }
+                        }
+
                     }
                 }
 
-                var firstControl = menu.Controls.FindControl(new Vector2(0, 0));
-
-                if ( firstControl != null )
+                if ( AllowMultiMarker )
                 {
-                    firstControl.BorderStyle(BorderArea.Horizontal, '~');
-                    if ( menu.Controls.FindControl(item => item.IndexID == firstControl.IndexID - 1 && item.IndexID != menu.Controls[0].IndexID) is ColorableLabel firstLabel )
-                    {
-                        firstLabel.BorderStyle(BorderArea.Horizontal, '~');
-                        previousSelectedPosition = firstLabel.Position;
-                    }
+                    menu.OnTarget = OnTarget;
+                    OiskiEngine.Input.AtTarget += menu.OnTarget;
                 }
 
-                menu.OnTarget = OnTarget;
-                OiskiEngine.Input.AtTarget += menu.OnTarget;
                 OiskiEngine.Input.SetNavigation("Vertical", true);
                 OiskiEngine.Input.SetSelect(true);
             }
             else
             {
-                OiskiEngine.Input.AtTarget -= menu.OnTarget;
+                if ( AllowMultiMarker )
+                {
+                    OiskiEngine.Input.AtTarget -= menu.OnTarget;
+                }
             }
 
             menu.Show(_show);

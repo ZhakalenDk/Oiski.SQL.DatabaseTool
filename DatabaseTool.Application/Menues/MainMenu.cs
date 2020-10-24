@@ -1,196 +1,149 @@
 ﻿using Oiski.ConsoleTech.Engine;
 using Oiski.ConsoleTech.Engine.Color.Controls;
-using Oiski.ConsoleTech.Engine.Color.Rendering;
-using Oiski.ConsoleTech.Engine.Controls;
-using Oiski.SQL.DatabaseTool.Application.Menues;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
-namespace Oiski.SQL.DatabaseTool.Application
+namespace Oiski.SQL.DatabaseTool.Application.Menues
 {
     public static class MainMenu
     {
-        private static readonly Menu menu = new Menu();
-        public static RenderColor ControlTextColor { get; set; } = new RenderColor(ConsoleColor.Cyan, ConsoleColor.Black);
-        public static RenderColor ControlBorderColor { get; set; } = new RenderColor(ConsoleColor.Blue, ConsoleColor.Black);
-
-        public static ColorableLabel Header { get; set; }
-        public static ColorableOption CreateDB { get; set; }
-        public static ColorableOption AttachDB { get; set; }
-        public static ColorableOption AssembleDB { get; set; }
-        public static ColorableOption PopulateDB { get; set; }
-        public static ColorableOption AssembleProcedures { get; set; }
-        public static ColorableOption DeleteTablesAndProcedures { get; set; }
-        public static ColorableOption DeleteTrace { get; set; }
-
-        public static void Init()
+        public static Window Container { get; } = new Window("Main Menu");
+        public static void Init ()
         {
-            Console.SetWindowSize(100, 27);
-            OiskiEngine.Input.SetNavigation("Horizontal", false);
+            ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
+            header.Position = PositionHelper.CenterControlOnX(0, header);
 
-            #region Header
-            Header = new ColorableLabel("Oiski's Database Tool", ControlTextColor, ControlBorderColor, _attachToEngine: false);
-            Header.Position = CenterControlOnX(0, Header);
-            #endregion
+            ColorableOption newDatabaseButton = Container.CreateControl<ColorableOption>("Create Database", new Vector2(header.Position.x, header.Position.y + 5));
+            newDatabaseButton.Position = PositionHelper.CenterControlOnX(newDatabaseButton.Position.y, newDatabaseButton);
+            newDatabaseButton.OnSelect += (s) =>
+            {
+                CreateMenu.Container.Show();
+                Container.Show(false);
+            };
 
-            #region Create Button
-            CreateDB = new ColorableOption("Create Database", ControlTextColor, ControlBorderColor, _attachToEngine: false)
+            ColorableOption attachDatabaseButton = Container.CreateControl<ColorableOption>("Attach Database", new Vector2(header.Position.x, newDatabaseButton.Position.y + 3));
+            attachDatabaseButton.Position = PositionHelper.CenterControlOnX(attachDatabaseButton.Position.y, attachDatabaseButton);
+            attachDatabaseButton.OnSelect += (s) =>
             {
-                SelectedIndex = new Vector2(0, 0)
+                AttachMenu.Container.Show();
+                Container.Show(false);
             };
-            CreateDB.Position = CenterControlOnX(Header.Position.y + 4, CreateDB);
-            CreateDB.BorderStyle(BorderArea.Horizontal, '~');
-            CreateDB.OnSelect += (s) =>
-            {
-                OiskiEngine.Input.ResetSlection();
-                CreateDBMenu.Show();
-                Show(false);
-            };
-            #endregion
 
-            #region Attach Button
-            AttachDB = new ColorableOption("Attach Database", ControlTextColor, ControlBorderColor, _attachToEngine: false)
-            {
-                SelectedIndex = new Vector2(0, 1)
-            };
-            AttachDB.Position = CenterControlOnX(CreateDB.Position.y + 3, AttachDB);
-            AttachDB.OnSelect += (s) =>
-            {
-                OiskiEngine.Input.ResetSlection();
-                AttachDBMenu.Show();
-                Show(false);
-            };
-            #endregion
-
-            #region Assemble Button
-            AssembleDB = new ColorableOption("Assemble Tables", ControlTextColor, ControlBorderColor, _attachToEngine: false)
-            {
-                SelectedIndex = new Vector2(0, 2)
-            };
-            AssembleDB.Position = CenterControlOnX(AttachDB.Position.y + 3, AssembleDB);
-            AssembleDB.OnSelect += (s) =>
+            ColorableOption assembleDatabaseButton = Container.CreateControl<ColorableOption>("Assemble Tables", new Vector2(header.Position.x, attachDatabaseButton.Position.y + 3));
+            assembleDatabaseButton.Position = PositionHelper.CenterControlOnX(assembleDatabaseButton.Position.y, assembleDatabaseButton);
+            assembleDatabaseButton.OnSelect += (s) =>
             {
                 if ( Program.Tool != null )
                 {
-                    Show(false);
-                    LoadingWindow.Show("Creating Tables. Standby...");
+                    Container.ResetMarker = false;
+                    Container.Show(false);
+                    LoadingScreen.Show("Creating Tables. Standby...");
                     Program.Tool.AssembleDatabase();
-                    Show();
-                    LoadingWindow.Show(false);
+                    Container.Show();
+                    Container.ResetMarker = true;
+                    LoadingScreen.Show(null, false);
+                }
+                else
+                {
+                    InfoScreen.Show(1, new string[,] { { "Error", "No Database Found", "error" } });
+                    Container.Show(false);
                 }
             };
-            #endregion
 
-            #region Populate Button
-            PopulateDB = new ColorableOption("Populate With Test Data", ControlTextColor, ControlBorderColor, _attachToEngine: false)
-            {
-                SelectedIndex = new Vector2(0, 3)
-            };
-            PopulateDB.Position = CenterControlOnX(AssembleDB.Position.y + 3, PopulateDB);
-            PopulateDB.OnSelect += (s) =>
+            ColorableOption populateDatabaseButton = Container.CreateControl<ColorableOption>("Populate Tables", new Vector2(header.Position.x, assembleDatabaseButton.Position.y + 3));
+            populateDatabaseButton.Position = PositionHelper.CenterControlOnX(populateDatabaseButton.Position.y, populateDatabaseButton);
+            populateDatabaseButton.OnSelect += (s) =>
             {
                 if ( Program.Tool != null )
                 {
-                    Show(false);
-                    LoadingWindow.Show("Populating Database. Standby...");
+                    Container.ResetMarker = false;
+                    Container.Show(false);
+                    LoadingScreen.Show("Populating Database. Standby...");
                     Program.Tool.PopulateDatabase();
-                    Show();
-                    LoadingWindow.Show(false);
+                    Container.Show();
+                    Container.ResetMarker = true;
+                    LoadingScreen.Show(null, false);
+                }
+                else
+                {
+                    InfoScreen.Show(1, new string[,] { { "Error", "No Database Found", "error" } });
+                    Container.Show(false);
                 }
             };
-            #endregion
 
-            #region Assemble Procedures Button
-            AssembleProcedures = new ColorableOption("Assemble Procedures", ControlTextColor, ControlBorderColor, _attachToEngine: false)
-            {
-                SelectedIndex = new Vector2(0, 4)
-            };
-            AssembleProcedures.Position = CenterControlOnX(PopulateDB.Position.y + 3, AssembleProcedures);
-            AssembleProcedures.OnSelect += (s) =>
+            ColorableOption assembleProceduresButton = Container.CreateControl<ColorableOption>("Assemble Procedures", new Vector2(header.Position.x, populateDatabaseButton.Position.y + 3));
+            assembleProceduresButton.Position = PositionHelper.CenterControlOnX(assembleProceduresButton.Position.y, assembleProceduresButton);
+            assembleProceduresButton.OnSelect += (s) =>
             {
                 if ( Program.Tool != null )
                 {
-                    Show(false);
-                    LoadingWindow.Show("Creating Procedures. Standby...");
+                    Container.ResetMarker = false;
+                    Container.Show(false);
+                    LoadingScreen.Show("Creating Procedures. Standby...");
                     Program.Tool.CreateProcedures();
-                    Show();
-                    LoadingWindow.Show(false);
+                    Container.Show();
+                    Container.ResetMarker = true;
+                    LoadingScreen.Show(null, false);
+                }
+                else
+                {
+                    InfoScreen.Show(1, new string[,] { { "Error", "No Database Found", "error" } });
+                    Container.Show(false);
                 }
             };
-            #endregion
 
-            #region Delete Tables & Procedures
-            DeleteTablesAndProcedures = new ColorableOption("Delete Tables & Procedures", ControlTextColor, ControlBorderColor, _attachToEngine: false)
-            {
-                SelectedIndex = new Vector2(0, 5)
-            };
-            DeleteTablesAndProcedures.Position = CenterControlOnX(AssembleProcedures.Position.y + 3, DeleteTablesAndProcedures);
-            DeleteTablesAndProcedures.OnSelect += (s) =>
+            ColorableOption deleteDataButton = Container.CreateControl<ColorableOption>("Delete Data", new Vector2(header.Position.x, assembleProceduresButton.Position.y + 3));
+            deleteDataButton.Position = PositionHelper.CenterControlOnX(deleteDataButton.Position.y, deleteDataButton);
+            deleteDataButton.OnSelect += (s) =>
             {
                 if ( Program.Tool != null )
                 {
-                    Show(false);
-                    LoadingWindow.Show("Deleting Data. Standby...");
+                    Container.ResetMarker = false;
+                    Container.Show(false);
+                    LoadingScreen.Show("Deleting Data. Standby...");
                     Program.Tool.DeleteData();
-                    Show();
-                    LoadingWindow.Show(false);
+                    Container.Show();
+                    Container.ResetMarker = true;
+                    LoadingScreen.Show(null, false);
+                }
+                else
+                {
+                    InfoScreen.Show(1, new string[,] { { "Error", "No Database Found", "error" } });
+                    Container.Show(false);
                 }
             };
-            #endregion
 
-            #region Delete Database Button
-            DeleteTrace = new ColorableOption("Delete Trace", ControlTextColor, ControlBorderColor, _attachToEngine: false)
-            {
-                SelectedIndex = new Vector2(0, 6)
-            };
-            DeleteTrace.Position = CenterControlOnX(DeleteTablesAndProcedures.Position.y + 3, DeleteTrace);
-            DeleteTrace.OnSelect += (s) =>
+            ColorableOption deleteDatabaseButton = Container.CreateControl<ColorableOption>("Delete Database", new Vector2(header.Position.x, deleteDataButton.Position.y + 3));
+            deleteDatabaseButton.Position = PositionHelper.CenterControlOnX(deleteDatabaseButton.Position.y, deleteDatabaseButton);
+            deleteDatabaseButton.OnSelect += (s) =>
             {
                 if ( Program.Tool != null )
                 {
-                    Show(false);
-                    LoadingWindow.Show("Deleting Trace. Standby...");
+                    Container.ResetMarker = false;
+                    Container.Show(false);
+                    LoadingScreen.Show("Deleting Trace. Standby...");
                     Program.Tool.DeleteDatabase(true);
                     if ( File.Exists($"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Settings.xml") )
                     {
                         File.Delete(( $"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Settings.xml" ));
                     }
                     Program.Tool = null;
-                    Show();
-                    LoadingWindow.Show(false);
+                    Container.Show();
+                    Container.ResetMarker = true;
+                    LoadingScreen.Show(null, false);
+                }
+                else
+                {
+                    InfoScreen.Show(1, new string[,] { { "Error", "No Database Found", "error" } });
+                    Container.Show(false);
                 }
             };
-            #endregion
 
-            #region Add Controls
-            menu.Controls.AddControl(Header);
-            menu.Controls.AddControl(CreateDB);
-            menu.Controls.AddControl(AttachDB);
-            menu.Controls.AddControl(AssembleDB);
-            menu.Controls.AddControl(PopulateDB);
-            menu.Controls.AddControl(AssembleProcedures);
-            menu.Controls.AddControl(DeleteTablesAndProcedures);
-            menu.Controls.AddControl(DeleteTrace);
-            #endregion
-        }
-
-        private static Vector2 CenterControlOnX(int _positionY, Label _control, Label _control2 = null)
-        {
-            return new Vector2(( Console.WindowWidth / 2 ) - ( ( _control.Text.Length / 2 + 2 ) + ( ( _control2 != null ) ? ( _control2.Text.Length / 2 + 2 ) : ( 0 ) ) ), _positionY);
-        }
-
-        public static void Show(bool _show = true)
-        {
-            if ( _show )
-            {
-                Console.SetWindowSize(100, 27);
-                OiskiEngine.Configuration.Size = new Vector2(Console.WindowWidth, Console.WindowHeight);
-                OiskiEngine.Input.SetNavigation("Vertical", true);
-                OiskiEngine.Input.SetSelect(true);
-                CreateDB.BorderStyle(BorderArea.Horizontal, '~');
-            }
-            menu.Show(_show);
-            OiskiEngine.Input.ResetSlection();
+            ColorableOption exitButton = Container.CreateControl<ColorableOption>("Close Application", new Vector2(header.Position.x, deleteDatabaseButton.Position.y + 3));
+            exitButton.Position = PositionHelper.CenterControlOnX(exitButton.Position.y, exitButton);
+            exitButton.OnSelect += (s) => Environment.Exit(0);
         }
     }
 }

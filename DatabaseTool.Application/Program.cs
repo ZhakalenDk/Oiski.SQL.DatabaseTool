@@ -16,10 +16,12 @@ namespace Oiski.SQL.DatabaseTool.Application
         {
             Console.SetWindowSize(100, 31);
 
-            TheMainMenu.Init();
-            TheCreateMenu.Init();
-            TheLoadingScreen.Init();
-            TheMainMenu.Container.Show();
+            MainMenu.Init();
+            CreateMenu.Init();
+            AttachMenu.Init();
+            LoadingScreen.Init();
+            InfoScreen.Init();
+            MainMenu.Container.Show();
 
             OiskiEngine.Input.SetNavigation("Horizontal", false);
 

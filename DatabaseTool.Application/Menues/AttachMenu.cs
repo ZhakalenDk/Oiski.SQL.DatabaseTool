@@ -7,9 +7,10 @@ using System.Text;
 
 namespace Oiski.SQL.DatabaseTool.Application.Menues
 {
-    public static class TheCreateMenu
+    public static class AttachMenu
     {
-        public static Window Container { get; } = new Window("Create Menu");
+        public static Window Container { get; } = new Window("Attach Menu");
+
         public static void Init ()
         {
             ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
@@ -23,27 +24,20 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             ColorableTextField pathTextField = Container.CreateControl<ColorableTextField>(string.Empty, new Vector2(pathLabel.Position.x + pathLabel.Size.x - 1, pathLabel.Position.y));
             pathTextField.TextColor = new RenderColor(ConsoleColor.Green, ConsoleColor.Black);
 
-            ColorableOption createDatabaseButton = Container.CreateControl<ColorableOption>("Create Database", new Vector2());
+            ColorableOption createDatabaseButton = Container.CreateControl<ColorableOption>("Attach Database", new Vector2());
             createDatabaseButton.Position = PositionHelper.CenterControlOnX(pathLabel.Position.y + 5, createDatabaseButton);
             createDatabaseButton.OnSelect += (s) =>
             {
-                if ( !string.IsNullOrWhiteSpace(nameTextField.Text) && !string.IsNullOrWhiteSpace(pathTextField.Text) && Program.Tool == null )
+                if ( !string.IsNullOrWhiteSpace(nameTextField.Text) && !string.IsNullOrWhiteSpace(pathTextField.Text) )
                 {
                     Container.Show(false);
-                    TheLoadingScreen.Show("Creating Database. Standby...");
+                    LoadingScreen.Show("Attaching Database. Standby...");
                     Program.Tool = new DatabaseTool(nameTextField.Text, pathTextField.Text);
-
-                    if ( !Program.Tool.CreateDatabase() )
-                    {
-
-                    }
-
                     Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
                     Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);
                     Program.Settings.Save(pathTextField.Text);
-
-                    TheMainMenu.Container.Show();
-                    TheLoadingScreen.Show(null, false);
+                    MainMenu.Container.Show();
+                    LoadingScreen.Show(null, false);
                 }
             };
 
@@ -51,7 +45,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             backButton.Position = PositionHelper.CenterControlOnX(createDatabaseButton.Position.y + 3, backButton);
             backButton.OnSelect += (s) =>
             {
-                TheMainMenu.Container.Show();
+                MainMenu.Container.Show();
                 Container.Show(false);
             };
         }
