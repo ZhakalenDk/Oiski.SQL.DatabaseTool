@@ -10,8 +10,15 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 {
     public static class CreateMenu
     {
+        /// <summary>
+        /// The <see cref="Window"/> container that contains the functionality for establishing a visual <see cref="DatabaseTool"/> menu
+        /// </summary>
         public static Window Container { get; } = new Window("Create Menu");
-        public static void Init ()
+
+        /// <summary>
+        /// Initialize the visual <see cref="DatabaseTool"/> menu
+        /// </summary>
+        public static void Init()
         {
             ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
             header.Position = PositionHelper.CenterControlOnX(0, header);
@@ -28,6 +35,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             createDatabaseButton.Position = PositionHelper.CenterControlOnX(pathLabel.Position.y + 5, createDatabaseButton);
             createDatabaseButton.OnSelect += (s) =>
             {
+                //  Make sure the user typed somehting in the text fields before attempting to create a database
                 if ( !string.IsNullOrWhiteSpace(nameTextField.Text) && !string.IsNullOrWhiteSpace(pathTextField.Text) && Program.Tool == null )
                 {
                     Container.Show(false);
@@ -36,9 +44,9 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 
                     if ( !Program.Tool.CreateDatabase() )
                     {
-                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "Info", "Make sure the Database does not exist!", string.Empty } });
+                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "See Logfile at", $"{pathTextField}", string.Empty } });
                     }
-                    else
+                    else    //  Error Handling
                     {
                         Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
                         Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);

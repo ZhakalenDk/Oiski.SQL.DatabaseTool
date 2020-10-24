@@ -3,15 +3,22 @@ using Oiski.ConsoleTech.Engine.Color.Controls;
 using Oiski.ConsoleTech.Engine.Color.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Oiski.SQL.DatabaseTool.Application.Menues
 {
     public static class AttachMenu
     {
+        /// <summary>
+        /// The <see cref="Window"/> container that contains the functionality for establishing a visual <see cref="DatabaseTool"/> menu
+        /// </summary>
         public static Window Container { get; } = new Window("Attach Menu");
 
-        public static void Init ()
+        /// <summary>
+        /// Initialize the visual <see cref="DatabaseTool"/> menu
+        /// </summary>
+        public static void Init()
         {
             ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
             header.Position = PositionHelper.CenterControlOnX(0, header);
@@ -28,15 +35,28 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             createDatabaseButton.Position = PositionHelper.CenterControlOnX(pathLabel.Position.y + 5, createDatabaseButton);
             createDatabaseButton.OnSelect += (s) =>
             {
+                //  Make sure that the user typed somehting in the text fields before trying to attach a database
                 if ( !string.IsNullOrWhiteSpace(nameTextField.Text) && !string.IsNullOrWhiteSpace(pathTextField.Text) )
                 {
                     Container.Show(false);
                     LoadingScreen.Show("Attaching Database. Standby...");
-                    Program.Tool = new DatabaseTool(nameTextField.Text, pathTextField.Text);
-                    Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
-                    Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);
-                    Program.Settings.Save(pathTextField.Text);
-                    MainMenu.Container.Show();
+                    Program.Tool = null;
+
+                    string dbPath = $"{pathTextField.Text}\\{nameTextField.Text}.mdf";
+                    string configPath = $"{pathTextField.Text}\\{nameTextField.Text}_Settings.xml";
+                    bool mdfExists = File.Exists(dbPath);
+                    bool configExists = File.Exists(configPath);
+
+                    if ( mdfExists && configExists )
+                    {
+                        Program.Tool = new DatabaseTool(nameTextField.Text, pathTextField.Text);
+                        Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
+                        Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);
+                        Program.Settings.Save(pathTextField.Text);
+                    }
+
+                    InfoScreen.Show(2, new string[,] { { "Database Attached", $"{mdfExists}", ( ( mdfExists ) ? ( "Success" ) : ( "Error" ) ) }, { "Config File Attached", $"{configExists}", ( ( configExists ) ? ( "Success" ) : ( "Error" ) ) } });
+
                     LoadingScreen.Show(null, false);
                 }
             };

@@ -9,8 +9,15 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 {
     public static class MainMenu
     {
+        /// <summary>
+        /// The <see cref="Window"/> container that contains the functionality for establishing a visual <see cref="DatabaseTool"/> menu
+        /// </summary>
         public static Window Container { get; } = new Window("Main Menu");
-        public static void Init ()
+
+        /// <summary>
+        /// Initialize the visual <see cref="DatabaseTool"/> menu
+        /// </summary>
+        public static void Init()
         {
             ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
             header.Position = PositionHelper.CenterControlOnX(0, header);
@@ -37,12 +44,10 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             {
                 if ( Program.Tool != null )
                 {
-                    Container.ResetMarker = false;
                     Container.Show(false);
                     LoadingScreen.Show("Creating Tables. Standby...");
-                    Program.Tool.AssembleDatabase();
-                    Container.Show();
-                    Container.ResetMarker = true;
+                    bool tablesAssembled = Program.Tool.AssembleDatabase();
+                    InfoScreen.Show(1, new string[,] { { "Tables Assembled", $"{tablesAssembled}", ( ( tablesAssembled ) ? ( "Success" ) : ( "Error" ) ) } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -58,12 +63,11 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             {
                 if ( Program.Tool != null )
                 {
-                    Container.ResetMarker = false;
                     Container.Show(false);
                     LoadingScreen.Show("Populating Database. Standby...");
-                    Program.Tool.PopulateDatabase();
-                    Container.Show();
-                    Container.ResetMarker = true;
+
+                    bool populated = Program.Tool.PopulateDatabase();
+                    InfoScreen.Show(1, new string[,] { { "Tables Populated", $"{populated}", ( ( populated ) ? ( "Success" ) : ( "Error" ) ) } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -79,12 +83,10 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             {
                 if ( Program.Tool != null )
                 {
-                    Container.ResetMarker = false;
                     Container.Show(false);
                     LoadingScreen.Show("Creating Procedures. Standby...");
-                    Program.Tool.CreateProcedures();
-                    Container.Show();
-                    Container.ResetMarker = true;
+                    bool proceduresCreated = Program.Tool.CreateProcedures();
+                    InfoScreen.Show(1, new string[,] { { "Procedures Created", $"{proceduresCreated}", ( ( proceduresCreated ) ? ( "Success" ) : ( "Error" ) ) } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -100,12 +102,10 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             {
                 if ( Program.Tool != null )
                 {
-                    Container.ResetMarker = false;
                     Container.Show(false);
                     LoadingScreen.Show("Deleting Data. Standby...");
-                    Program.Tool.DeleteData();
-                    Container.Show();
-                    Container.ResetMarker = true;
+                    bool dataDeleted = Program.Tool.DeleteData();
+                    InfoScreen.Show(1, new string[,] { { "Data Deleted", $"{dataDeleted}", ( ( dataDeleted ) ? ( "Success" ) : ( "Error" ) ) } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -121,17 +121,18 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             {
                 if ( Program.Tool != null )
                 {
-                    Container.ResetMarker = false;
                     Container.Show(false);
                     LoadingScreen.Show("Deleting Trace. Standby...");
-                    Program.Tool.DeleteDatabase(true);
+                    bool databaseDeleted = Program.Tool.DeleteDatabase(true);
+                    bool configDeleted = false;
                     if ( File.Exists($"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Settings.xml") )
                     {
                         File.Delete(( $"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Settings.xml" ));
+                        configDeleted = true;
                     }
+                    InfoScreen.Show(2, new string[,] { { "Database Deleted", $"{databaseDeleted}", ( ( databaseDeleted ) ? ( "Success" ) : ( "Error" ) ) }, { "Config File Deleted", $"{configDeleted}", ( ( configDeleted ) ? ( "Success" ) : ( "Error" ) ) } });
+
                     Program.Tool = null;
-                    Container.Show();
-                    Container.ResetMarker = true;
                     LoadingScreen.Show(null, false);
                 }
                 else

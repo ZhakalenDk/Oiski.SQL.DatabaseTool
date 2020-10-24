@@ -12,17 +12,20 @@ namespace Oiski.SQL.DatabaseTool.Application
     {
         public static DatabaseTool Tool { get; set; } = null;
         public static MySettingsCollection Settings { get; set; } = null;
-        static void Main ()
+        static void Main()
         {
             Console.SetWindowSize(100, 31);
 
+            #region Initializaion
             MainMenu.Init();
             CreateMenu.Init();
             AttachMenu.Init();
             LoadingScreen.Init();
             InfoScreen.Init();
             MainMenu.Container.Show();
+            #endregion
 
+            #region Engine Configuration
             OiskiEngine.Input.SetNavigation("Horizontal", false);
 
             ColorRenderer renderer = new ColorRenderer()
@@ -31,6 +34,8 @@ namespace Oiski.SQL.DatabaseTool.Application
             };
 
             OiskiEngine.ChangeRenderer(renderer);
+            #endregion
+
             OiskiEngine.Run();
         }
     }

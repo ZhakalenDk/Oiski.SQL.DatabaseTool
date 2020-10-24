@@ -9,19 +9,46 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
 {
     public static class InfoScreen
     {
+        /// <summary>
+        /// The <see cref="Window"/> container that contains the functionality for establishing a visual <see cref="DatabaseTool"/> menu
+        /// </summary>
         public static Window Container { get; } = new Window("Info Screen");
 
+        /// <summary>
+        /// The <see cref="RenderColor"/> to apply when simulating a succesful task completion
+        /// </summary>
         public static RenderColor SuccesColor { get; set; } = new RenderColor(ConsoleColor.Green, ConsoleColor.Black);
+        /// <summary>
+        /// The <see cref="RenderColor"/> to apply when simulating an unsuccessful task completion
+        /// </summary>
         public static RenderColor ErrorColor { get; set; } = new RenderColor(ConsoleColor.Red, ConsoleColor.Black);
 
-        public static void Init ()
+        /// <summary>
+        /// Initialize the visual <see cref="DatabaseTool"/> menu
+        /// </summary>
+        public static void Init()
         {
             Container.AllowMultiMarker = false;
             ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
             header.Position = PositionHelper.CenterControlOnX(0, header);
         }
 
-        public static void Show (int _infoAmount, string[,] _infoInOrder)
+        /// <summary>
+        /// Display the <see cref="InfoScreen"/>.
+        /// <br/>
+        /// <paramref name="_infoInOrder"/> is read as: <strong>{{"Label Text", "Text Field Text", "State"}}</strong> and <paramref name="_infoInOrder"/> can't be higher or lower than <paramref name="_infoAmount"/>.
+        /// <br/>
+        /// <br/>
+        /// <strong><paramref name="_infoInOrder"/> Value Types</strong>
+        /// <list type="bullet">
+        /// <item><strong>Label Text:</strong> <i>The Text that will be displayed as 'header' text</i></item>
+        /// <item><strong>Text Field Text:</strong> <i>The Message</i></item>
+        /// <item><strong>State:</strong> <i>Defines the color of the message text. [<strong>Success</strong>=Green] [<strong>Error</strong>=Red] [<strong>Default</strong>=Yellow]</i></item>
+        /// </list>
+        /// </summary>
+        /// <param name="_infoAmount">The amount of <see cref="ColorableLabel"/>/<see cref="ColorableTextField"/> combi control to intantiate</param>
+        /// <param name="_infoInOrder">The values to apply to each instantiated <see cref="ColorableLabel"/>/<see cref="ColorableTextField"/> combi control</param>
+        public static void Show(int _infoAmount, string[,] _infoInOrder)
         {
             if ( _infoInOrder.GetLength(0) > _infoAmount || _infoInOrder.GetLength(0) < _infoAmount )
             {
@@ -68,13 +95,17 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
             Container.Show();
         }
 
-        public static void Hide ()
+        /// <summary>
+        /// Hide the <see cref="InfoScreen"/>
+        /// </summary>
+        public static void Hide()
         {
             Container.Show(false);
 
             for ( int i = 1; i < Container.GetCollection.GetControls.Count; i++ )
             {
                 Container.GetCollection.RemoveControl(Container.GetCollection[i]);
+                i = 0;
             }
         }
     }
