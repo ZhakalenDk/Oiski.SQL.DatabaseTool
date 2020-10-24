@@ -14,6 +14,7 @@ namespace Oiski.SQL.DatabaseTool.Application
         public static MySettingsCollection Settings { get; set; } = null;
         static void Main()
         {
+            Console.Title = "Oiski's Database Tool - v1.0.0.0";
             Console.SetWindowSize(100, 31);
 
             #region Initializaion
