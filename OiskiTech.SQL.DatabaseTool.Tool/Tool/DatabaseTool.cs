@@ -54,7 +54,7 @@ namespace Oiski.SQL.DatabaseTool
         /// This will create a new log (.txt) file if it does not elready exist. if it does it will append the specified message to the files content
         /// </summary>
         /// <param name="_message"></param>
-        private void AddToLog(string _message)
+        private void AddToLog (string _message)
         {
             using ( StreamWriter writer = File.AppendText($"{PathToDatabase}\\{DBName}_Log.txt") )
             {
@@ -66,7 +66,7 @@ namespace Oiski.SQL.DatabaseTool
         /// Checks if the MDF file exists and if it does it will set the internal <see cref="SqlConnection"/> using th e<see cref="ConnectionString"/>
         /// </summary>
         /// <returns></returns>
-        public bool Exists()
+        public bool Exists ()
         {
             if ( File.Exists($"{PathToDatabase}\\{DBName}.mdf") )
             {
@@ -82,7 +82,7 @@ namespace Oiski.SQL.DatabaseTool
         /// Creates an entirely new database if it does not already exist. (<i>This will generate and MDF file and a LOG file at the specified <see cref="PathToDatabase"/></i>)
         /// </summary>
         /// <returns></returns>
-        public bool CreateDatabase()
+        public bool CreateDatabase ()
         {
             if ( !Exists() )
             {
@@ -111,7 +111,7 @@ namespace Oiski.SQL.DatabaseTool
         /// This will assemble tables for the database specified by the <see cref="ConnectionString"/>. This is done by executing the query found in the following file: Quries\AssembleQuery.txt
         /// </summary>
         /// <returns></returns>
-        public bool AssembleDatabase()
+        public bool AssembleDatabase ()
         {
             if ( connection != null || Exists() )
             {
@@ -147,7 +147,7 @@ namespace Oiski.SQL.DatabaseTool
         /// This will create stored procedures for the database specified by the <see cref="ConnectionString"/>. This is done by executing the query found in the following file: Quries\ProcedureQuery.txt
         /// </summary>
         /// <returns></returns>
-        public bool CreateProcedures()
+        public bool CreateProcedures ()
         {
             if ( connection != null || Exists() )
             {
@@ -191,7 +191,7 @@ namespace Oiski.SQL.DatabaseTool
         /// This will populate the database specified by the <see cref="ConnectionString"/> with test data. This is done by executing the query found in the following file: Quries\Populate.txt
         /// </summary>
         /// <returns></returns>
-        public bool PopulateDatabase()
+        public bool PopulateDatabase ()
         {
             if ( connection != null || Exists() )
             {
@@ -227,7 +227,7 @@ namespace Oiski.SQL.DatabaseTool
         /// This will delete all data including tables and procedures for the database specified by the <see cref="ConnectionString"/>. This is done by executing the query found in the following file: Quries\DeletionQuery.txt
         /// </summary>
         /// <returns></returns>
-        public bool DeleteData()
+        public bool DeleteData ()
         {
             if ( connection != null || Exists() )
             {
@@ -270,7 +270,7 @@ namespace Oiski.SQL.DatabaseTool
         /// </summary>
         /// <param name="deleteLog">Whether or not to delete the log file associated with the database</param>
         /// <returns></returns>
-        public bool DeleteDatabase(bool deleteLog = false)
+        public bool DeleteDatabase (bool deleteLog = false)
         {
             try
             {
@@ -309,7 +309,7 @@ namespace Oiski.SQL.DatabaseTool
         /// <strong>NOTE:</strong> <i>This will generate a clean database with nothing in it and place it in the specified <see cref="PathToDatabase"/></i> 
         /// </summary>
         /// <returns></returns>
-        private SqlConnection CreateMDF()
+        private SqlConnection CreateMDF ()
         {
             /*Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Oiski\source\repos\DBDynamicTest\DBDynamicTest\TestDB.mdf;Integrated Security=True*/
             string creationQuery = $"CREATE DATABASE {DBName} ON PRIMARY (NAME = {DBName}_Data, FILENAME = '{PathToDatabase}\\{DBName}.mdf') LOG ON (NAME = {DBName}_Log, FILENAME = '{PathToDatabase}\\{DBName}.ldf')";
@@ -325,7 +325,7 @@ namespace Oiski.SQL.DatabaseTool
             return new SqlConnection(ConnectionString);
         }
 
-        private string GenerateConnectionString()
+        private string GenerateConnectionString ()
         {
             return $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={PathToDatabase}\\{DBName}.mdf;Integrated Security=True";
         }
@@ -334,7 +334,7 @@ namespace Oiski.SQL.DatabaseTool
         /// Loads the text files in the \Quries folder
         /// </summary>
         /// <returns></returns>
-        private bool ReadData()
+        private bool ReadData ()
         {
             string filePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\Queris";
 
@@ -359,7 +359,7 @@ namespace Oiski.SQL.DatabaseTool
             }
             else
             {
-                AddToLog($"One of more query files do not exist at: {PathToDatabase}");
+                AddToLog($"One of more query files do not exist at: {filePath}");
                 return false;
             }
 
@@ -389,7 +389,7 @@ namespace Oiski.SQL.DatabaseTool
         /// The path where the database will be stored will be set according to <see cref="Path.GetDirectoryName(string)"/> based on the location of <see cref="Assembly.GetExecutingAssembly"/>
         /// </summary>
         /// <param name="_dbName">The name of the database</param>
-        public DatabaseTool(string _dbName)
+        public DatabaseTool (string _dbName)
         {
             DBName = _dbName;
             PathToDatabase = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -405,7 +405,7 @@ namespace Oiski.SQL.DatabaseTool
         /// </summary>
         /// <param name="_dbName">The name of the database</param>
         /// <param name="_path">The path to the database MDF file without the file itself</param>
-        public DatabaseTool(string _dbName, string _path)
+        public DatabaseTool (string _dbName, string _path)
         {
 
             DBName = _dbName;
