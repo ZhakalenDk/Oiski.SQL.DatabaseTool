@@ -4,6 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Oiski.SQL.DatabaseTool.Application</RootNamespace>
+    <ApplicationIcon>DatabaseToolIcon).ico</ApplicationIcon>
+    <StartupObject>Oiski.SQL.DatabaseTool.Application.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
