@@ -46,7 +46,8 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                     if ( Program.Tool != null && !Program.Tool.CreateDatabase() )
                     {
                         //  Error Handling
-                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "See Logfile", $"{pathTextField.Text}", string.Empty } });
+                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "See Logfile", $"{Program.Tool.PathToDatabase}", string.Empty } });
+                        Program.Tool = null;
                     }
                     else    //  If Succesful
                     {
