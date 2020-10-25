@@ -49,9 +49,20 @@ namespace Oiski.SQL.DatabaseTool
         /// <param name="_message"></param>
         private void AddToLog (string _message)
         {
-            using ( StreamWriter writer = File.AppendText($"{PathToDatabase}\\{DBName}_Log.txt") )
+            try
             {
-                writer.WriteLine($"{DateTime.Now}: {_message}");
+                using ( StreamWriter writer = File.AppendText($"{PathToDatabase}\\{DBName}_Log.txt") )
+                {
+                    writer.WriteLine($"{DateTime.Now}: {_message}");
+                }
+            }
+            catch ( Exception _ )
+            {
+
+                using ( StreamWriter writer = File.AppendText($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{DBName}_Log.txt") )
+                {
+                    writer.WriteLine($"{DateTime.Now}: {_message}");
+                }
             }
         }
 
@@ -67,6 +78,7 @@ namespace Oiski.SQL.DatabaseTool
 
                 return true;
             }
+
 
             return false;
         }
