@@ -340,6 +340,8 @@ namespace Oiski.SQL.DatabaseTool
             catch ( Exception _e )
             {
                 AddToLog(_e.ToString());
+
+                return null;
             }
             finally
             {
