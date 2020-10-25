@@ -23,6 +23,8 @@ namespace Oiski.SQL.DatabaseTool
 
         /// <summary>
         /// The path to the database MDF file without the file itself.
+        /// <br/>
+        /// If a database can't be created this will return <see cref="Path.GetDirectoryName(string)"/> based on <see cref="Assembly.GetExecutingAssembly"/>.Location
         /// </summary>
         public string PathToDatabase { get; set; }
 
@@ -91,17 +93,27 @@ namespace Oiski.SQL.DatabaseTool
             {
                 connection = CreateMDF();
 
-                try
+                if ( connection != null )
                 {
-                    connection.Open();
-                    connection.Close();
+                    try
+                    {
+                        connection.Open();
+                        connection.Close();
 
-                    AddToLog($"Database with name: {DBName} was created at: {PathToDatabase}");
-                    return true;
+                        AddToLog($"Database with name: {DBName} was created at: {PathToDatabase}");
+                        return true;
+                    }
+                    catch ( Exception _e )
+                    {
+                        AddToLog(_e.ToString());
+
+                        return false;
+                    }
                 }
-                catch ( Exception _e )
+                else
                 {
-                    AddToLog(_e.ToString());
+                    PathToDatabase = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    AddToLog("No Connection could be established");
                     return false;
                 }
             }
