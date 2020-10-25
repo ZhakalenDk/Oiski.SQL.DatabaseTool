@@ -398,7 +398,7 @@ namespace Oiski.SQL.DatabaseTool
 
             if ( !ReadData() )
             {
-                throw new Exception("An error accured while reading the query data. Make sure all files are present in the specified location");
+                AddToLog("An error accured while reading the query data. Make sure all files are present in the specified location");
             }
         }
 
@@ -415,7 +415,7 @@ namespace Oiski.SQL.DatabaseTool
 
             if ( !ReadData() )
             {
-                throw new Exception("An error accured while reading the query data. Make sure all files are present in the specified location");
+                AddToLog("An error accured while reading the query data. Make sure all files are present in the specified location");
             }
         }
 
