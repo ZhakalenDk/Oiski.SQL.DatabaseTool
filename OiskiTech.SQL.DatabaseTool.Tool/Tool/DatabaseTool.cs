@@ -327,13 +327,26 @@ namespace Oiski.SQL.DatabaseTool
             /*Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Oiski\source\repos\DBDynamicTest\DBDynamicTest\TestDB.mdf;Integrated Security=True*/
             string creationQuery = $"CREATE DATABASE {DBName} ON PRIMARY (NAME = {DBName}_Data, FILENAME = '{PathToDatabase}\\{DBName}.mdf') LOG ON (NAME = {DBName}_Log, FILENAME = '{PathToDatabase}\\{DBName}.ldf')";
 
-            SqlConnection myConn = new SqlConnection(TEMPDBCONSTRING);
+            SqlConnection myConn = null;
 
-            SqlCommand myCommand = new SqlCommand(creationQuery, myConn);
+            try
+            {
+                myConn = new SqlConnection(TEMPDBCONSTRING);
 
-            myConn.Open();
-            myCommand.ExecuteNonQuery();
-            myConn.Close();
+                SqlCommand myCommand = new SqlCommand(creationQuery, myConn);
+
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+            }
+            catch ( Exception _e )
+            {
+                AddToLog(_e.ToString());
+            }
+            finally
+            {
+                myConn?.Close();
+            }
+
 
             return new SqlConnection(ConnectionString);
         }
