@@ -18,6 +18,8 @@
         <member name="P:Oiski.SQL.DatabaseTool.DatabaseTool.PathToDatabase">
             <summary>
             The path to the database MDF file without the file itself.
+            <br/>
+            If a database can't be created this will return <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/> based on <see cref="M:System.Reflection.Assembly.GetExecutingAssembly"/>.Location
             </summary>
         </member>
         <member name="P:Oiski.SQL.DatabaseTool.DatabaseTool.ConnectionString">

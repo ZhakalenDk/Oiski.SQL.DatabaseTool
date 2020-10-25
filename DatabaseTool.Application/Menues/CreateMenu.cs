@@ -3,6 +3,7 @@ using Oiski.ConsoleTech.Engine.Color.Controls;
 using Oiski.ConsoleTech.Engine.Color.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -46,7 +47,10 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                     if ( Program.Tool != null && !Program.Tool.CreateDatabase() )
                     {
                         //  Error Handling
-                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "See Logfile", $"{Program.Tool.PathToDatabase}", string.Empty } });
+
+
+                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "Error", "See Config File", string.Empty } });
+                        Process.Start("notepad.exe", $"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Log.txt");
                         Program.Tool = null;
                     }
                     else    //  If Succesful

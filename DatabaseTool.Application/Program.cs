@@ -15,7 +15,7 @@ namespace Oiski.SQL.DatabaseTool.Application
         static void Main()
         {
             /*[Major Features], [Minor Features], [Fixes], [Code Revisions] | Each Section resets at 100*/
-            Console.Title = "Oiski's Database Tool - v1.0.1.0";
+            Console.Title = "Oiski's Database Tool - v1.1.5.1";
             Console.SetWindowSize(100, 31);
 
             #region Initializaion
