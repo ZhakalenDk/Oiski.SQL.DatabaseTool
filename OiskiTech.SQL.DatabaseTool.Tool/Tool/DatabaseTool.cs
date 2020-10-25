@@ -56,12 +56,11 @@ namespace Oiski.SQL.DatabaseTool
                     writer.WriteLine($"{DateTime.Now}: {_message}");
                 }
             }
-            catch ( Exception _e )
+            catch ( Exception )
             {
-
                 using ( StreamWriter writer = File.AppendText($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{DBName}_Log.txt") )
                 {
-                    writer.WriteLine($"{DateTime.Now}: {_e}");
+                    writer.WriteLine($"{DateTime.Now}: {_message}");
                 }
             }
         }
