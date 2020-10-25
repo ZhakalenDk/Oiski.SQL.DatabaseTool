@@ -17,7 +17,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
         /// <summary>
         /// Initialize the visual <see cref="DatabaseTool"/> menu
         /// </summary>
-        public static void Init()
+        public static void Init ()
         {
             ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
             header.Position = PositionHelper.CenterControlOnX(0, header);
@@ -47,7 +47,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                     Container.Show(false);
                     LoadingScreen.Show("Creating Tables. Standby...");
                     bool tablesAssembled = Program.Tool.AssembleDatabase();
-                    InfoScreen.Show(1, new string[,] { { "Tables Assembled", $"{tablesAssembled}", ( ( tablesAssembled ) ? ( "Success" ) : ( "Error" ) ) } });
+                    InfoScreen.Show(2, new string[,] { { "Tables Assembled", $"{tablesAssembled}", ( ( tablesAssembled ) ? ( "Success" ) : ( "Error" ) ) }, { "Error Message", ( ( tablesAssembled ) ? ( "No Errors" ) : ( "See Log file" ) ), string.Empty } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -67,7 +67,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                     LoadingScreen.Show("Populating Database. Standby...");
 
                     bool populated = Program.Tool.PopulateDatabase();
-                    InfoScreen.Show(1, new string[,] { { "Tables Populated", $"{populated}", ( ( populated ) ? ( "Success" ) : ( "Error" ) ) } });
+                    InfoScreen.Show(2, new string[,] { { "Tables Populated", $"{populated}", ( ( populated ) ? ( "Success" ) : ( "Error" ) ) }, { "Error Message", ( ( populated ) ? ( "No Errors" ) : ( "See Log file" ) ), string.Empty } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -86,7 +86,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                     Container.Show(false);
                     LoadingScreen.Show("Creating Procedures. Standby...");
                     bool proceduresCreated = Program.Tool.CreateProcedures();
-                    InfoScreen.Show(1, new string[,] { { "Procedures Created", $"{proceduresCreated}", ( ( proceduresCreated ) ? ( "Success" ) : ( "Error" ) ) } });
+                    InfoScreen.Show(2, new string[,] { { "Procedures Created", $"{proceduresCreated}", ( ( proceduresCreated ) ? ( "Success" ) : ( "Error" ) ) }, { "Error Message", ( ( proceduresCreated ) ? ( "No Errors" ) : ( "See Log file" ) ), string.Empty } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -105,7 +105,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                     Container.Show(false);
                     LoadingScreen.Show("Deleting Data. Standby...");
                     bool dataDeleted = Program.Tool.DeleteData();
-                    InfoScreen.Show(1, new string[,] { { "Data Deleted", $"{dataDeleted}", ( ( dataDeleted ) ? ( "Success" ) : ( "Error" ) ) } });
+                    InfoScreen.Show(2, new string[,] { { "Data Deleted", $"{dataDeleted}", ( ( dataDeleted ) ? ( "Success" ) : ( "Error" ) ) }, { "Error Message", ( ( dataDeleted ) ? ( "No Errors" ) : ( "See Log file" ) ), string.Empty } });
                     LoadingScreen.Show(null, false);
                 }
                 else
@@ -130,7 +130,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                         File.Delete(( $"{Program.Tool.PathToDatabase}\\{Program.Tool.DBName}_Settings.xml" ));
                         configDeleted = true;
                     }
-                    InfoScreen.Show(2, new string[,] { { "Database Deleted", $"{databaseDeleted}", ( ( databaseDeleted ) ? ( "Success" ) : ( "Error" ) ) }, { "Config File Deleted", $"{configDeleted}", ( ( configDeleted ) ? ( "Success" ) : ( "Error" ) ) } });
+                    InfoScreen.Show(3, new string[,] { { "Database Deleted", $"{databaseDeleted}", ( ( databaseDeleted ) ? ( "Success" ) : ( "Error" ) ) }, { "Config File Deleted", $"{configDeleted}", ( ( configDeleted ) ? ( "Success" ) : ( "Error" ) ) }, { "Error Message", ( ( databaseDeleted ) ? ( "No Errors" ) : ( "See Log file" ) ), string.Empty } });
 
                     Program.Tool = null;
                     LoadingScreen.Show(null, false);

@@ -18,7 +18,7 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
         /// <summary>
         /// Initialize the visual <see cref="DatabaseTool"/> menu
         /// </summary>
-        public static void Init()
+        public static void Init ()
         {
             ColorableLabel header = Container.CreateControl<ColorableLabel>("Oiski's Database Tool", new Vector2());
             header.Position = PositionHelper.CenterControlOnX(0, header);
@@ -40,13 +40,15 @@ namespace Oiski.SQL.DatabaseTool.Application.Menues
                 {
                     Container.Show(false);
                     LoadingScreen.Show("Creating Database. Standby...");
+
                     Program.Tool = new DatabaseTool(nameTextField.Text, pathTextField.Text);
 
-                    if ( !Program.Tool.CreateDatabase() )
+                    if ( Program.Tool != null && !Program.Tool.CreateDatabase() )
                     {
-                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "See Logfile at", $"{pathTextField}", string.Empty } });
+                        //  Error Handling
+                        InfoScreen.Show(2, new string[,] { { "Database Created", "False", "Error" }, { "See Logfile", $"{pathTextField}", string.Empty } });
                     }
-                    else    //  Error Handling
+                    else    //  If Succesful
                     {
                         Program.Settings = new MySettingsCollection($"{Program.Tool.DBName}_Settings");
                         Program.Settings.AddSetting("ConnectionString", Program.Tool.ConnectionString);
