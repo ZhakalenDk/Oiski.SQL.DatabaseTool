@@ -2,10 +2,7 @@
 using Oiski.ConsoleTech.Engine.Color.Controls;
 using Oiski.ConsoleTech.Engine.Color.Rendering;
 using Oiski.ConsoleTech.Engine.Controls;
-using Oiski.ConsoleTech.Engine.Input;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Oiski.SQL.DatabaseTool.Application.Menues
 {

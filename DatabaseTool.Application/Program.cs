@@ -1,9 +1,6 @@
 ﻿using System;
-using System.IO;
 using Oiski.ConsoleTech.Engine;
-using Oiski.ConsoleTech.Engine.Color.Controls;
 using Oiski.ConsoleTech.Engine.Color.Rendering;
-using Oiski.ConsoleTech.Engine.Controls;
 using Oiski.SQL.DatabaseTool.Application.Menues;
 
 namespace Oiski.SQL.DatabaseTool.Application

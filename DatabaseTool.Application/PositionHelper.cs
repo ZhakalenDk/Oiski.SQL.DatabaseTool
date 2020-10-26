@@ -1,8 +1,6 @@
 ﻿using Oiski.ConsoleTech.Engine;
 using Oiski.ConsoleTech.Engine.Controls;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Oiski.SQL.DatabaseTool.Application
 {
